@@ -244,7 +244,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_22_220916) do
   create_table "patients", force: :cascade do |t|
     t.string "name", null: false
     t.string "primary_phone", null: false
-    t.string "emergency_conctact"
+    t.string "emergency_contact"
     t.string "emergency_contact_phone"
     t.string "emergency_contact_relationship"
     t.string "identifier"
@@ -289,7 +289,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_22_220916) do
     t.string "emergency_reference_wording"
     t.string "in_case_of_emergency", default: [], array: true
     t.index ["clinic_id"], name: "index_patients_on_clinic_id"
-    t.index ["emergency_conctact"], name: "index_patients_on_emergency_conctact"
+    t.index ["emergency_contact"], name: "index_patients_on_emergency_contact"
     t.index ["emergency_contact_phone"], name: "index_patients_on_emergency_contact_phone"
     t.index ["fund_id"], name: "index_patients_on_fund_id"
     t.index ["identifier"], name: "index_patients_on_identifier"
