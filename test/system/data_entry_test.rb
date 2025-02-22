@@ -28,7 +28,6 @@ class DataEntryTest < ApplicationSystemTestCase
       select '2 days', from: 'patient_last_menstrual_period_days'
       fill_in 'City', with: 'Washington'
       select 'DC', from: 'patient_state'
-      fill_in 'County', with: 'Wash'
       fill_in 'Zipcode', with: '20009'
       fill_in 'CATF pledge', with: '100'
       fill_in 'Age', with: '30'
@@ -79,7 +78,6 @@ class DataEntryTest < ApplicationSystemTestCase
         assert_equal 'Other', find('#patient_race_ethnicity').value
         assert has_field? 'City', with: 'Washington'
         assert_equal 'DC', find('#patient_state').value
-        assert has_field? 'County', with: 'Wash'
         assert has_field? 'Zipcode', with: '20009'
         assert_equal 'English', find('#patient_language').text
         assert_equal 'no', find('#patient_voicemail_preference').value
@@ -133,7 +131,6 @@ class DataEntryTest < ApplicationSystemTestCase
       select '2 days', from: 'patient_last_menstrual_period_days'
       fill_in 'City', with: 'Washington'
       select 'DC', from: 'patient_state'
-      fill_in 'County', with: 'Wash'
       fill_in 'CATF pledge', with: '99'
       fill_in 'Fund pledged at', with: 80.days.ago.strftime('%m/%d/%Y')
       fill_in 'Age', with: '30'

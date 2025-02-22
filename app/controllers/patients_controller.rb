@@ -142,7 +142,7 @@ class PatientsController < ApplicationController
     :line_id,
     :legal_name, :email,
     :age, :race_ethnicity, :language, :voicemail_preference, :textable,
-    :city, :state, :county, :zipcode, :emergency_contact, :other_phone,
+    :city, :state, :zipcode, :emergency_contact, :other_phone,
     :emergency_contact_relationship,
     :other_contact_referencing,
     :employment_status, :income,

@@ -51,7 +51,6 @@ class ArchivedPatient < ApplicationRecord
       line: patient.line,
       city: patient.city,
       state: patient.state,
-      county: patient.county,
       intake_date: patient.intake_date,
       procedure_date: patient.procedure_date,
       multiday_appointment: patient.multiday_appointment,

@@ -15,7 +15,6 @@ module Exportable
     "Language" => :preferred_language,
     "Age" => :age_range,
     "State" => :state,
-    "County" => :county,
     "City" => :city,
     "Race or Ethnicity" => :race_ethnicity,
     "Employment Status" => :employment_status,

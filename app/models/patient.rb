@@ -58,7 +58,7 @@ class Patient < ApplicationRecord
   validates :household_size_adults, :household_size_children,
             numericality: { only_integer: true, allow_nil: true, greater_than_or_equal_to: -1 }
   validates :name, :primary_phone, :emergency_contact, :emergency_contact_phone, :emergency_contact_relationship,
-            :voicemail_preference, :language, :pronouns, :city, :state, :county, :zipcode,
+            :voicemail_preference, :language, :pronouns, :city, :state, :zipcode,
             :race_ethnicity, :employment_status, :insurance, :income, :referred_by, :procedure_type,
             length: { maximum: 150 }
   validates_associated :fulfillment

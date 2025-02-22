@@ -211,7 +211,6 @@ class UpdatePatientInfoTest < ApplicationSystemTestCase
       wait_for_ajax
 
       select 'DC', from: 'patient_state'
-      fill_in 'County', with: 'Wash'
       fill_in 'Zipcode', with: '200091002'
       select 'Voicemail OK', from: 'patient_voicemail_preference'
       check 'Textable?'
@@ -246,7 +245,6 @@ class UpdatePatientInfoTest < ApplicationSystemTestCase
         assert_equal 'White/Caucasian', find('#patient_race_ethnicity').value
         assert has_field? 'City', with: 'Washington'
         assert_equal 'DC', find('#patient_state').value
-        assert has_field? 'County', with: 'Wash'
         assert has_field? 'Zipcode', with: '20009-1002'
         assert_equal 'yes', find('#patient_voicemail_preference').value
         assert has_checked_field?('Textable?')

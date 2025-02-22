@@ -56,7 +56,6 @@ es:
         clinic_id: ID de la clínica
         completed_ultrasound: Ultrasonido completado
         confirmed: Confirmada
-        county: Condado
         date_of_check: Fecha del cheque
         employment_status: Estatus de empleo
         fulfilled: Cumplida

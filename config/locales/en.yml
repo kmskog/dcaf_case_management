@@ -43,7 +43,6 @@ en:
         city: City
         clinic_id: Clinic ID
         confirmed: Confirmed
-        county: County
         date_of_check: Date of check
         employment_status: Employment status
         fulfilled: Fulfilled

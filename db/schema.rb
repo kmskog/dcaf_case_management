@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_22_220916) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -26,7 +26,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.boolean "shared_flag"
     t.string "city"
     t.string "state"
-    t.string "county"
     t.string "race_ethnicity"
     t.string "employment_status"
     t.string "insurance"
@@ -260,7 +259,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.integer "age"
     t.string "city"
     t.string "state"
-    t.string "county"
     t.string "zipcode"
     t.string "race_ethnicity"
     t.string "employment_status"
