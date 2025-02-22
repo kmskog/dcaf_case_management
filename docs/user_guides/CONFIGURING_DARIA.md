@@ -8,8 +8,8 @@ You can access your config panel by clicking the `Admin` dropdown, and clicking 
 
 To change a configuration, fill in the form input and click the `Save` button beneath that input. This takes effect immediately for all users.
 
-## Adding new lines
+## Adding new cities
 
-Many funds accommodate an increase in volume by funneling calls into different hotlines. DARIA accounts for this by having a concept of a `line`, and keeping patients within that Line. For example, the DC Abortion Fund has a line for DC callers, a line for MD callers, a line for VA callers, and a line for Spanish speakers.
+Many funds provide care in multiple cities. DARIA accounts for this by having a concept of a `city`, and keeping patients within that City.
 
-Adding or removing lines is a setting that engineers need to change for you; to add, contract, or rename lines in your DARIA, reach out to the DARIA team.
+Adding or removing cities is a setting that engineers need to change for you; to add, contract, or rename cities in your DARIA, reach out to the DARIA team.

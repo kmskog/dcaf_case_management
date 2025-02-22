@@ -14,9 +14,9 @@ class PatientTest::Exportable < PatientTest
       @archived = create :archived_patient
     end
 
-    describe 'get_line' do
-      it 'should return the line name' do
-        assert_equal @patient.line.name, @patient.get_line
+    describe 'get_city' do
+      it 'should return the city name' do
+        assert_equal @patient.city.name, @patient.get_city
       end
     end
 

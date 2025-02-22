@@ -31,7 +31,7 @@ class Call < ApplicationRecord
       cm_name:      user&.name || 'System',
       patient_name: can_call.name,
       patient_id:   can_call.id,
-      line:         can_call.line
+      city:         can_call.city
     }
   end
 end

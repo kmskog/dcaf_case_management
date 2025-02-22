@@ -4,23 +4,23 @@ require_relative '../patient_test'
 class PatientTest::PatientSearchable < PatientTest
   describe 'search method' do
     before do
-      @line = create :line, name: 'DC'
-      @line2 = create :line, name: 'MD'
+      @city = create :city, name: 'New York'
+      @city2 = create :city, name: 'San Francisco'
       @pt_1 = create :patient, name: 'Susan Sher',
                                primary_phone: '124-456-6789',
-                               line: @line
+                               city: @city
       @pt_2 = create :patient, name: 'Susan E',
                                primary_phone: '124-567-7890',
                                emergency_contact: 'Friend Ship',
-                               line: @line
+                               city: @city
       @pt_3 = create :patient, name: 'Susan A',
                                primary_phone: '555-555-5555',
                                emergency_contact_phone: '999-999-9999',
-                               line: @line
-      @pt_4 = create :patient, name: 'Susan A in MD',
+                               city: @city
+      @pt_4 = create :patient, name: 'Susan A in San Francisco',
                                primary_phone: '777-777-7777',
                                emergency_contact_phone: '999-111-9888',
-                               line: @line2
+                               city: @city2
     end
 
     it 'should find a patient on name or other name' do
@@ -54,7 +54,7 @@ class PatientTest::PatientSearchable < PatientTest
 
       it 'should limit the number of patients returned' do
         16.times do |num|
-          create :patient, primary_phone: "124-567-78#{num+10}", line: @line
+          create :patient, primary_phone: "124-567-78#{num+10}", city: @city
         end
         assert_equal 15, Patient.search('124').count
       end
@@ -63,7 +63,7 @@ class PatientTest::PatientSearchable < PatientTest
     describe 'limit' do
       before do
         16.times do |num|
-          create :patient, primary_phone: "124-567-78#{num+10}", line: @line
+          create :patient, primary_phone: "124-567-78#{num+10}", city: @city
         end
       end
 
@@ -85,9 +85,9 @@ class PatientTest::PatientSearchable < PatientTest
       assert_equal 2, Patient.search('124').count
     end
 
-    it 'should be able to narrow on line' do
+    it 'should be able to narrow on city' do
       assert_equal 2, Patient.search('Susan A').count
-      assert_equal 1, Patient.search('Susan A', lines: @line2).count
+      assert_equal 1, Patient.search('Susan A', cities: @city2).count
     end
 
     it 'should not choke if it does not find anything' do

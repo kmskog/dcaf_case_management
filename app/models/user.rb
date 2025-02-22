@@ -42,7 +42,7 @@ class User < ApplicationRecord
   # Relationships
   has_many :call_list_entries
   has_many :auth_factors, dependent: :destroy
-  belongs_to :line, optional: true
+  belongs_to :city, optional: true
 
   # Validations
   # email presence validated through Devise
@@ -58,7 +58,7 @@ class User < ApplicationRecord
   validate :secure_password, if: :updating_password?
   # i18n-tasks-use t('errors.messages.password.password_strength')
   validates :password, password_strength: {use_dictionary: true}, if: :updating_password?
-  validates :name, :line, :email, length: { maximum: 150 }
+  validates :name, :city, :email, length: { maximum: 150 }
 
   # To accommodate tenancy, we use our own devise validations
   # See https://github.com/heartcombo/devise/blob/master/lib/devise/models/validatable.rb

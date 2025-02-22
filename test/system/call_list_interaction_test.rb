@@ -4,11 +4,11 @@ class CallListInteractionTest < ApplicationSystemTestCase
   include ActiveSupport::Testing::TimeHelpers
 
   before do
-    @line = create :line
-    @line2 = create :line
-    @patient = create :patient, name: 'Susan Everyteen', line: @line
-    @patient_2 = create :patient, name: 'Thorny', line: @line
-    @va_patient = create :patient, name: 'James Hetfield', line: @line2
+    @city = create :city
+    @city2 = create :city
+    @patient = create :patient, name: 'Susan Everyteen', city: @city
+    @patient_2 = create :patient, name: 'Thorny', city: @city
+    @va_patient = create :patient, name: 'James Hetfield', city: @city2
     @user = create :user
     @user.add_patient @va_patient
     log_in_as @user
@@ -23,7 +23,7 @@ class CallListInteractionTest < ApplicationSystemTestCase
       end
     end
 
-    it 'should scope the call list to a particular line' do
+    it 'should scope the call list to a particular city' do
       within :css, '#call_list_content' do
         assert has_no_text? @va_patient.name
       end
@@ -119,12 +119,12 @@ class CallListInteractionTest < ApplicationSystemTestCase
     end
   end
 
-  describe 'line switching' do
+  describe 'city switching' do
     before { @user.update role: :admin }
 
-    it 'should move patients on call lists when switching lines' do
+    it 'should move patients on call lists when switching cities' do
       visit edit_patient_path @patient
-      select @line2.name, from: 'patient_line_id'
+      select @city2.name, from: 'patient_city_id'
       wait_for_ajax
 
       visit authenticated_root_path
@@ -133,7 +133,7 @@ class CallListInteractionTest < ApplicationSystemTestCase
       end
       log_out
 
-      log_in_as @user, @line2
+      log_in_as @user, @city2
       within :css, '#call_list_content' do
         assert has_text? @patient.name
       end

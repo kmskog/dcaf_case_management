@@ -5661,10 +5661,10 @@
       "search_placeholder": "Name (Susan Smith) or Phone (555-555-5555) or Patient ID (M5-5555)",
       "table_content": {
         "check_number": "Check #",
+        "city": "City",
         "clinic": "Clinic",
         "date_of_check": "Date of check",
-        "fund_payout": "%{fund} payout",
-        "line": "Line"
+        "fund_payout": "%{fund} payout"
       },
       "title": "Accountant dashboard"
     },
@@ -5699,9 +5699,9 @@
           "care_coordinator": "Care Coordinator",
           "check_number": "Check number",
           "city": "City",
+          "city_id": "City ID",
           "clinic_id": "Clinic ID",
           "confirmed": "Confirmed",
-          "county": "County",
           "date_of_check": "Date of check",
           "emergency_contact": "Emergency contact",
           "emergency_contact_phone": "Emergency contact phone",
@@ -5715,7 +5715,6 @@
           "insurance": "Insurance",
           "intake_date": "Intake Date",
           "language": "Language",
-          "line_id": "Line ID",
           "multiday_appointment": "Multi-day appointment",
           "name": "Name",
           "practical_support_waiver": "Practical support waiver",
@@ -5788,6 +5787,13 @@
         "couldnt_reach_patient": "Couldn't reach patient",
         "left_voicemail": "Left voicemail",
         "reached_patient": "Reached patient"
+      }
+    },
+    "cities": {
+      "new": {
+        "start": "Get started",
+        "welcome_to_daria": "Welcome to DARIA (%{fund} edition)!",
+        "what_city": "What city are you working on?"
       }
     },
     "clinic_locator": {
@@ -5863,7 +5869,7 @@
     },
     "dashboard": {
       "activity_log": {
-        "label": "%{current_line} Line Activity Log"
+        "label": "%{current_city} City Activity Log"
       },
       "budget_bar": {
         "pledged": "pledged",
@@ -6449,13 +6455,6 @@
         }
       }
     },
-    "lines": {
-      "new": {
-        "start": "Get started",
-        "welcome_to_daria": "Welcome to DARIA (%{fund} edition)!",
-        "what_line": "What line are you working on?"
-      }
-    },
     "multi_factor": {
       "authenticate": "Authenticate",
       "authentication_error": "Authentication error",
@@ -6507,8 +6506,8 @@
       "cm_resources": {
         "label": "CM Resources"
       },
-      "current_line": {
-        "helper": "Your current line"
+      "current_city": {
+        "helper": "Your current city"
       },
       "footer": {
         "national_abortion_federation": "National Abortion Federation",
@@ -6883,7 +6882,7 @@
       "practical_support_confirmed": "Check this box if this practical support is confirmed by the point of contact.",
       "practical_support_fulfilled": "Check this box if this practical support is completed or paid out, and requires no further attention.",
       "referred_to_clinic": "Check this box if you as a case manager referred the patient to a particular clinic.",
-      "shared_cases": "These are patients who require a little more attention. This list is shared across all case managers working on a single line. Patients are removed from this list automatically after they are marked as resolved without assistance, or after %{shared_reset} days of inactivity.",
+      "shared_cases": "These are patients who require a little more attention. This list is shared across all case managers working on a single city. Patients are removed from this list automatically after they are marked as resolved without assistance, or after %{shared_reset} days of inactivity.",
       "status_definition": "Status definition",
       "unconfirmed_support": "These are patients who have unconfirmed practical supports."
     },
@@ -9985,10 +9984,10 @@
       "search_placeholder": "Nombre (Susan Smith) o teléfono (555-555-5555) o identificación del paciente (M5-5555)",
       "table_content": {
         "check_number": "# de cheque",
+        "city": "Ciudad",
         "clinic": "Clínica",
         "date_of_check": "Fecha del cheque",
         "fund_payout": "Pago de %{fund}",
-        "line": "Línea",
         "pledge_amount": "Cantidad de promesa",
         "pledge_sent": "Promesa enviada",
         "weeks_at_procedure": "Semanas en el procedimiento",
@@ -10036,10 +10035,10 @@
           "audited": "Auditada",
           "check_number": "Cheque #",
           "city": "Ciudad",
+          "city_id": "ID de la ciudad",
           "clinic_id": "ID de la clínica",
           "completed_ultrasound": "Ultrasonido completado",
           "confirmed": "Confirmada",
-          "county": "Condado",
           "date_of_check": "Fecha del cheque",
           "emergency_contact": "Otro contacto",
           "emergency_contact_phone": "Otro teléfono",
@@ -10059,7 +10058,6 @@
           "language": "Idioma",
           "last_menstrual_period_days": "Últimos días del período menstrual",
           "last_menstrual_period_weeks": "Últimas semanas del período menstrual",
-          "line_id": "ID de la línea",
           "multiday_appointment": "Cita de varios días",
           "naf_pledge": "Promesa de la NAF",
           "name": "Nombre",
@@ -10168,6 +10166,13 @@
         "reached_patient": "Paciente alcanzado"
       }
     },
+    "cities": {
+      "new": {
+        "start": "Empezar",
+        "welcome_to_daria": "¡Bienvenido a DARIA (edición de %{fund})!",
+        "what_city": "¿En cuál ciudad estás trabajando?"
+      }
+    },
     "clinic_locator": {
       "description": "Filtre las clínicas de acuerdo con la aceptación de NAF / NNAF y sus límites de gestación; ordenar por proximidad a un código postal.",
       "experimental_note": "Esta es una característica experimental.",
@@ -10247,7 +10252,7 @@
     },
     "dashboard": {
       "activity_log": {
-        "label": "Actividad de línea de llamadas %{current_line}"
+        "label": "Actividad de ciudad %{current_city}"
       },
       "budget_bar": {
         "pledged": "prometido",
@@ -10750,13 +10755,6 @@
         }
       }
     },
-    "lines": {
-      "new": {
-        "start": "Empezar",
-        "welcome_to_daria": "¡Bienvenido a DARIA (edición de %{fund})!",
-        "what_line": "¿En cuál línea estás trabajando?"
-      }
-    },
     "multi_factor": {
       "authenticate": "Autenticar",
       "authentication_error": "Error de autenticación",
@@ -10808,8 +10806,8 @@
       "cm_resources": {
         "label": "Recursos del Administrador de Casos"
       },
-      "current_line": {
-        "helper": "Tu linea actual"
+      "current_city": {
+        "helper": "Tu ciudad actual"
       },
       "footer": {
         "national_abortion_federation": "Federación Nacional de Abortos",

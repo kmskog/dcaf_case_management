@@ -1,19 +1,19 @@
 # Controller for rendering the home view and patient search.
 class DashboardsController < ApplicationController
-  include LinesHelper
+  include CitiesHelper
   include BudgetBarCalculable
 
-  before_action :pick_line_if_not_set, only: [:index, :search]
+  before_action :pick_city_if_not_set, only: [:index, :search]
 
   def index
-    @shared_patients = eager_loaded_patients.shared_patients(current_line)
-    @unconfirmed_support_patients = eager_loaded_patients.unconfirmed_practical_support(current_line)
+    @shared_patients = eager_loaded_patients.shared_patients(current_city)
+    @unconfirmed_support_patients = eager_loaded_patients.unconfirmed_practical_support(current_city)
   end
 
   def search
     @results = if params[:search].present?
                  eager_loaded_patients.search params[:search],
-                                              lines: [current_line || Line.all]
+                                              cities: [current_city || City.all]
                else
                  []
                end
@@ -31,7 +31,7 @@ class DashboardsController < ApplicationController
     # i18n-tasks-use t('dashboard.budget_bar.pledged_item')
     # i18n-tasks-use t('dashboard.budget_bar.sent_item')
     render partial: 'dashboards/budget_bar',
-           locals: budget_bar_calculations(current_line)
+           locals: budget_bar_calculations(current_city)
   end
 
   private
@@ -48,7 +48,7 @@ class DashboardsController < ApplicationController
     /[a-z]/i.match query
   end
 
-  def pick_line_if_not_set
-    redirect_to new_line_path if session[:line_id].blank?
+  def pick_city_if_not_set
+    redirect_to new_city_path if session[:city_id].blank?
   end
 end

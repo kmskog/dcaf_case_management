@@ -1,9 +1,9 @@
 # For render
 class EventsController < ApplicationController
-  include LinesHelper
+  include CitiesHelper
 
   def index
-    events = Event.where(line: current_line)
+    events = Event.where(city: current_city)
                   .order(created_at: :desc)
 
     @events = paginate_results(events)

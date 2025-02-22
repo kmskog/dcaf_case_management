@@ -10,14 +10,14 @@ module IntegrationHelper
       'user[password]' => user.password
   end
 
-  def choose_line(line)
-    post lines_path, params: { line_id: line.id }
+  def choose_city(city)
+    post cities_path, params: { city_id: city.id }
   end
 
-  def log_in_as(user, line = nil)
+  def log_in_as(user, city = nil)
     log_in user
-    if Line.count > 1
-      select_line line || Line.first
+    if City.count > 1
+      select_city city || City.first
     end
   end
 
@@ -28,9 +28,9 @@ module IntegrationHelper
     click_on 'Sign in with password'
   end
 
-  def select_line(line)
-    wait_for_element line.name
-    choose line.name
+  def select_city(city)
+    wait_for_element city.name
+    choose city.name
     click_on 'Get started'
   end
 

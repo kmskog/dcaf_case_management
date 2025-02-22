@@ -5,14 +5,14 @@ class ActivityLogTest < ApplicationSystemTestCase
   before do
     @user = create :user
     @clinic = create :clinic
-    @line = create :line
+    @city = create :city
     @patient = create :patient,
                       fund_pledge: 100,
                       clinic: @clinic,
                       procedure_date: 3.days.from_now,
-                      line: @line
+                      city: @city
 
-    log_in_as @user, @line
+    log_in_as @user, @city
     visit edit_patient_path @patient
   end
 

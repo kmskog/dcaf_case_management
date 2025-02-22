@@ -6,12 +6,12 @@ class AccountantWorkflowTest < ApplicationSystemTestCase
   before do
     @user = create :user, role: :admin
     @clinic = create :clinic, name: 'a real clinic'
-    @line = create :line
+    @city = create :city
     @another_clinic = create :clinic, name: 'alternative clinic'
 
     @nonpledged_patient = create :patient, name: 'Eileene Zarha',
                                            intake_date: 5.weeks.ago,
-                                           line: @line
+                                           city: @city
 
     @pledged_patient = create :patient, name: 'Olga Zarha',
                                         fund_pledge: 100,
@@ -19,7 +19,7 @@ class AccountantWorkflowTest < ApplicationSystemTestCase
                                         pledge_sent: true,
                                         procedure_date: 2.weeks.ago,
                                         intake_date: 5.weeks.ago,
-                                        line: @line
+                                        city: @city
 
     @fulfilled_patient = create :patient, name: 'Thorny Zarha',
                                           fund_pledge: 200,
@@ -27,7 +27,7 @@ class AccountantWorkflowTest < ApplicationSystemTestCase
                                           pledge_sent: true,
                                           procedure_date: 2.weeks.ago,
                                           intake_date: 5.weeks.ago,
-                                          line: @line
+                                          city: @city
     @fulfilled_patient.fulfillment.update fulfilled: true,
                                           procedure_date: 1.week.ago,
                                           gestation_at_procedure: '3 weeks',
@@ -41,10 +41,10 @@ class AccountantWorkflowTest < ApplicationSystemTestCase
                                              fund_pledge: 123,
                                              procedure_date: 2.weeks.ago,
                                              intake_date: 5.weeks.ago,
-                                             line: @line
+                                             city: @city
 
 
-    log_in_as @user, @line
+    log_in_as @user, @city
     visit accountants_path
   end
 
@@ -79,7 +79,7 @@ class AccountantWorkflowTest < ApplicationSystemTestCase
                         clinic: @clinic,
                         fund_pledge: 100,
                         intake_date: 3.days.ago,
-                        line: @line,
+                        city: @city,
                         naf_pledge: 200,
                         patient_contribution: 100,
                         pledge_sent: true,

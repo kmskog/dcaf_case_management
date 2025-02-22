@@ -61,7 +61,7 @@ Rails.application.routes.draw do
 
     resources :accountants, only: [:index, :edit]
 
-    resources :lines, only: [:new, :create]
+    resources :cities, only: [:new, :create]
     post 'clinicfinder', to: 'clinicfinders#search', defaults: { format: :js }, as: 'clinicfinder_search'
     resources :clinics, only: [:index, :create, :update, :new, :destroy, :edit]
     resources :configs, only: [:index, :create, :update]

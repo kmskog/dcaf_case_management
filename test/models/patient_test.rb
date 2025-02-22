@@ -5,14 +5,14 @@ class PatientTest < ActiveSupport::TestCase
 
   before do
     @user = create :user
-    @line = create :line
+    @city = create :city
     @patient = create :patient, emergency_contact_phone: '111-222-3333',
                                 emergency_contact: 'Yolo',
-                                line: @line
+                                city: @city
 
     @patient2 = create :patient, emergency_contact_phone: '333-222-3333',
                                 emergency_contact: 'Foobar',
-                                line: @line
+                                city: @city
     @patient.calls.create attributes_for(:call, status: :reached_patient)
     @call = @patient.calls.first
     create_language_config
@@ -96,7 +96,7 @@ class PatientTest < ActiveSupport::TestCase
     end
 
     it 'should save the identifer' do
-      assert_equal @patient.identifier, "#{@patient.line.name[0]}#{@patient.primary_phone[-5]}-#{@patient.primary_phone[-4..-1]}"
+      assert_equal @patient.identifier, "#{@patient.city.name[0]}#{@patient.primary_phone[-5]}-#{@patient.primary_phone[-4..-1]}"
     end
 
     it 'should enforce unique phone numbers' do
@@ -108,28 +108,27 @@ class PatientTest < ActiveSupport::TestCase
       refute @patient2.valid?
     end
 
-    it 'should throw two different error messages for duplicates found on same line versus different line' do
-      line2 = create :line
-      line3 = create :line
+    it 'should throw two different error messages for duplicates found on same city versus different city' do
+      city2 = create :city
+      city3 = create :city
       marylandPatient = create :patient, name: 'Susan A in MD',
                                          primary_phone: '777-777-7777',
-                                         line: line2
-      sameLineDuplicate = create :patient, name: 'Susan B in MD',
-                                           line: line2
-      diffLineDuplicate = create :patient, name: 'Susan B in VA',
-                                           line: line3
+                                         city: city2
+      sameCityDuplicate = create :patient, name: 'Susan B in MD',
+                                           city: city2
+      diffCityDuplicate = create :patient, name: 'Susan B in VA',
+                                           city: city3
 
-      sameLineDuplicate.primary_phone = '777-777-7777'
-      diffLineDuplicate.primary_phone = '777-777-7777'
+      sameCityDuplicate.primary_phone = '777-777-7777'
+      diffCityineDuplicate.primary_phone = '777-777-7777'
 
-      sameLineDuplicate.save
-      diffLineDuplicate.save
+      sameCityDuplicate.save
 
-      refute sameLineDuplicate.valid?
-      refute diffLineDuplicate.valid?
+      refute sameCityDuplicate.valid?
+      refute diffCityDuplicate.valid?
 
-      error1 = sameLineDuplicate.errors.messages[:this_phone_number_is_already_taken]
-      error2 = diffLineDuplicate.errors.messages[:this_phone_number_is_already_taken]
+      error1 = sameCityDuplicate.errors.messages[:this_phone_number_is_already_taken]
+      error2 = diffCityDuplicate.errors.messages[:this_phone_number_is_already_taken]
 
       assert_not_equal error1, error2
     end
@@ -180,7 +179,7 @@ class PatientTest < ActiveSupport::TestCase
         shaped_patient2 = patient_to_hash @patient2
 
         # Testing dates is hard, so we use name as a proxy here
-        summary = Patient.pledged_status_summary(@line)
+        summary = Patient.pledged_status_summary(@city)
         assert_equal shaped_patient[:name],
                     summary[:pledged][0][:name]
         assert_equal shaped_patient2[:name],
@@ -198,7 +197,7 @@ class PatientTest < ActiveSupport::TestCase
                     config_value: {options: ['Wednesday']}
       Timecop.freeze("January 20, 1973") { @patient.update! fund_pledge: 300  }
       Timecop.freeze("January 22, 1973") do
-        summary = Patient.pledged_status_summary(@line)
+        summary = Patient.pledged_status_summary(@city)
         assert_equal 1, summary[:pledged].count
       end
     end
@@ -210,7 +209,7 @@ class PatientTest < ActiveSupport::TestCase
                     config_value: {options: ['Wednesday']}
       Timecop.freeze("January 20, 1973") { @patient.update! fund_pledge: 300  }
       Timecop.freeze("January 24, 1973") do
-        summary = Patient.pledged_status_summary(@line)
+        summary = Patient.pledged_status_summary(@city)
         assert_equal 0,summary[:pledged].count
       end
     end
@@ -226,7 +225,7 @@ class PatientTest < ActiveSupport::TestCase
                                                             clinic: create(:clinic) }
 
       Timecop.freeze("January 25, 1973") do
-        summary = Patient.pledged_status_summary(@line)
+        summary = Patient.pledged_status_summary(@city)
         assert_equal 1, summary[:sent].count
       end 
     end
@@ -248,7 +247,7 @@ class PatientTest < ActiveSupport::TestCase
 
       Timecop.freeze(tuesday_in_pacific) do
         # Testing dates is hard, so we use name as a proxy here
-        summary = Patient.pledged_status_summary(@line)
+        summary = Patient.pledged_status_summary(@city)
         assert_equal shaped_patient[:name],
                     summary[:pledged][0][:name]
         assert_equal shaped_patient2[:name],
@@ -306,23 +305,23 @@ class PatientTest < ActiveSupport::TestCase
       end
     end
 
-    describe 'update lines for call list entries on patient change' do
+    describe 'update cities for call list entries on patient change' do
       it 'should update call list entries to push them to the very end' do
         @user = create :user
-        @line2 = create :line
-        @line3 = create :line
-        create :call_list_entry, patient: @patient, user: @user, line: @line2
-        create :call_list_entry, patient: create(:patient, line: @line3),
+        @city2 = create :city
+        @city3 = create :city
+        create :call_list_entry, patient: @patient, user: @user, city: @city2
+        create :call_list_entry, patient: create(:patient, city: @city3),
                                  user: @user,
-                                 line: @line3
+                                 city: @city3
 
-        assert_difference "@user.call_list_entries.where(line: @line2).count", -1 do
-          assert_difference "@user.call_list_entries.where(line: @line3).count", 1 do
-            @patient.update line: @line3
+        assert_difference "@user.call_list_entries.where(city: @city2).count", -1 do
+          assert_difference "@user.call_list_entries.where(city: @city3).count", 1 do
+            @patient.update city: @city3
             @user.reload
           end
         end
-        entry = @user.call_list_entries.where(patient: @patient, line: @line3).first
+        entry = @user.call_list_entries.where(patient: @patient, city: @city3).first
         assert_equal entry.order_key, 999
       end
     end
@@ -362,18 +361,18 @@ class PatientTest < ActiveSupport::TestCase
     describe 'shareable concern methods' do
       describe 'shared_patients class method' do
         before do
-          @line = create :line
-          @line2 = create :line
+          @city = create :city
+          @city2 = create :city
           with_versioning do
             create :patient
-            2.times { create :patient, shared_flag: true, line: @line }
-            create :patient, shared_flag: true, line: @line2
+            2.times { create :patient, shared_flag: true, city: @city }
+            create :patient, shared_flag: true, city: @city2
           end
         end
 
-        it 'should return shared patients by line' do
-          assert_equal 2, Patient.shared_patients(@line).count
-          assert_equal 1, Patient.shared_patients(@line2).count
+        it 'should return shared patients by city' do
+          assert_equal 2, Patient.shared_patients(@city).count
+          assert_equal 1, Patient.shared_patients(@city2).count
         end
       end
 
@@ -559,21 +558,21 @@ class PatientTest < ActiveSupport::TestCase
         # no practical support, also should not show up
         @patient3 = create :patient, emergency_contact_phone: '333-222-1111',
                             emergency_contact: 'Cats',
-                            line: @line
+                            city: @city
       end
 
       context 'when a patient has unconfirmed supports' do
         it 'includes only the patient with unconfirmed support' do
-          assert_includes Patient.unconfirmed_practical_support(@line), @patient
-          assert_not_includes Patient.unconfirmed_practical_support(@line), @patient2
-          assert_not_includes Patient.unconfirmed_practical_support(@line), @patient3
+          assert_includes Patient.unconfirmed_practical_support(@city), @patient
+          assert_not_includes Patient.unconfirmed_practical_support(@city), @patient2
+          assert_not_includes Patient.unconfirmed_practical_support(@city), @patient3
         end
       end
 
       context 'when supports are confirmed' do
         it 'no longer includes the patient' do
           @patient.practical_supports.each {|x| x.update confirmed: true}
-          assert_empty Patient.unconfirmed_practical_support(@line)
+          assert_empty Patient.unconfirmed_practical_support(@city)
         end
       end
 
@@ -588,7 +587,7 @@ class PatientTest < ActiveSupport::TestCase
         end
 
         it 'should not return duplicates when multiple unconfirmed supports exist' do
-          assert_no_difference 'Patient.unconfirmed_practical_support(@line).length' do
+          assert_no_difference 'Patient.unconfirmed_practical_support(@city).length' do
             @patient.practical_supports.create support_type: 'Travel to the region',
                                               source: 'Catbus',
                                               amount: 50,
@@ -597,13 +596,13 @@ class PatientTest < ActiveSupport::TestCase
         end
 
         it 'returns the patient when some supports are confirmed' do
-          assert_no_difference 'Patient.unconfirmed_practical_support(@line).length' do
+          assert_no_difference 'Patient.unconfirmed_practical_support(@city).length' do
             @patient.practical_supports.first.update confirmed: true
           end
         end
 
         it 'no longer returns the patient when all supports are confirmed' do
-          assert_difference 'Patient.unconfirmed_practical_support(@line).length', -1 do
+          assert_difference 'Patient.unconfirmed_practical_support(@city).length', -1 do
             @patient.practical_supports.each { |support| support.update confirmed: true }
           end
         end

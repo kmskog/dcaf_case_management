@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col cities-form">
+    <h1 class="border-bottom title"><%= t 'cities.new.welcome_to_daria', fund: current_tenant.name %></h1>
+
+    <%= bootstrap_form_with url: cities_path, local: true, class: 'city-select-form' do |f| %>
+      <%= f.form_group :city_id, label: { text: t('cities.new.what_city') } do %>
+        <% @cities.each_with_index do |city, index| %>
+          <% if index == 0 %>
+            <%= f.radio_button :city_id, city.id, label: city.name, checked: true %>
+          <% else %>
+            <%= f.radio_button :city_id, city.id, label: city.name %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= f.submit t('cities.new.start'), class: 'btn-lg btn-primary' %>
+    <% end %>
+  </div>
+</div>

@@ -103,7 +103,7 @@ class FundTest < ActiveSupport::TestCase
         ActsAsTenant.with_tenant(fund) do
           create :user
           create :config
-          create :line
+          create :city
           create :clinic
         end
       end
@@ -111,13 +111,13 @@ class FundTest < ActiveSupport::TestCase
       @fund.delete_administrative_data
 
       ActsAsTenant.with_tenant(@fund) do
-        [ Clinic, Config, Line, User ].each do |model|
+        [ Clinic, Config, City, User ].each do |model|
           assert_equal 0, model.count
         end
       end
 
       ActsAsTenant.with_tenant(@fund2) do
-        [ Clinic, Config, Line, User ].each do |model|
+        [ Clinic, Config, City, User ].each do |model|
           assert_equal 1, model.count
         end
       end

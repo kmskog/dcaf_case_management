@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :archived_patient do
-    line
+    city
   intake_date { 400.days.ago }
   end
 end

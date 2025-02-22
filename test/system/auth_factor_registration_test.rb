@@ -9,7 +9,7 @@ class AuthFactorRegistrationTest < ApplicationSystemTestCase
   before do
     @twilio_verify_mock = Minitest::Mock.new
 
-    create :line
+    create :city
     log_in_as create(:user)
   end
 

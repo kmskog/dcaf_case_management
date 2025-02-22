@@ -4,7 +4,7 @@ require 'test_helper'
 class GoogleSSOTest < ActionDispatch::IntegrationTest
   describe 'access top page' do
     before do
-      create :line
+      create :city
       mock_omniauth
     end
 

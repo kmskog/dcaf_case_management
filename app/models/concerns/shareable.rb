@@ -18,8 +18,8 @@ module Shareable
   end
 
   class_methods do
-    def shared_patients(line)
-      Patient.where(line: line, shared_flag: true)
+    def shared_patients(city)
+      Patient.where(city: city, shared_flag: true)
     end
 
     def trim_shared_patients

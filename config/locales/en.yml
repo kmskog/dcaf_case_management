@@ -9,7 +9,7 @@ en:
       clinic: Clinic
       date_of_check: Date of check
       fund_payout: "%{fund} payout"
-      line: Line
+      city: City
     title: Accountant dashboard
   activerecord:
     attributes:
@@ -43,7 +43,6 @@ en:
         city: City
         clinic_id: Clinic ID
         confirmed: Confirmed
-        county: County
         date_of_check: Date of check
         employment_status: Employment status
         fulfilled: Fulfilled
@@ -54,7 +53,7 @@ en:
         insurance: Insurance
         intake_date: Intake Date
         language: Language
-        line_id: Line ID
+        city_id: City ID
         multiday_appointment: Multi-day appointment
         name: Name
         emergency_contact: Emergency contact
@@ -173,7 +172,7 @@ en:
       title: Configs
   dashboard:
     activity_log:
-      label: "%{current_line} Line Activity Log"
+      label: "%{current_city} City Activity Log"
     budget_bar:
       pledged: pledged
       pledged_item: "%{amount} pledged"
@@ -265,11 +264,11 @@ en:
     user_created: User created!
     user_update_error: Error saving user details - %{error}
     user_update_success: Successfully updated user details
-  lines:
+  cities:
     new:
       start: Get started
       welcome_to_daria: Welcome to DARIA (%{fund} edition)!
-      what_line: What line are you working on?
+      what_city: What city are you working on?
   multi_factor:
     authenticate: Authenticate
     authentication_error: Authentication error
@@ -313,8 +312,8 @@ en:
       user_management: User Management
     cm_resources:
       label: CM Resources
-    current_line:
-      helper: Your current line
+    current_city:
+      helper: Your current city
     footer:
       national_abortion_federation: National Abortion Federation
       please_send_feedback: Please send feedback or ideas to the programming team at
@@ -560,7 +559,7 @@ en:
     practical_support_confirmed: Check this box if this practical support is confirmed by the point of contact.
     practical_support_fulfilled: Check this box if this practical support is completed or paid out, and requires no further attention.
     referred_to_clinic: Check this box if you as a case manager referred the patient to a particular clinic.
-    shared_cases: These are patients who require a little more attention. This list is shared across all case managers working on a single line. Patients are removed from this list automatically after they are marked as resolved without assistance, or after %{shared_reset} days of inactivity.
+    shared_cases: These are patients who require a little more attention. This list is shared across all case managers working on a single city. Patients are removed from this list automatically after they are marked as resolved without assistance, or after %{shared_reset} days of inactivity.
     status_definition: Status definition
     unconfirmed_support: These are patients who have unconfirmed practical supports.
   user:

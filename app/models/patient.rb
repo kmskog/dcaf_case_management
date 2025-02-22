@@ -18,11 +18,11 @@ class Patient < ApplicationRecord
   before_save :save_identifier
   after_create :initialize_fulfillment
   after_update :confirm_still_shared, if: :shared_flag?
-  after_update :update_call_list_lines, if: :saved_change_to_line_id?
+  after_update :update_call_list_cities, if: :saved_change_to_city_id?
   after_destroy :destroy_associated_events
 
   # Relationships
-  belongs_to :line
+  belongs_to :city
   has_many :call_list_entries, dependent: :destroy
   has_many :users, through: :call_list_entries
   belongs_to :clinic, optional: true
@@ -36,12 +36,12 @@ class Patient < ApplicationRecord
   accepts_nested_attributes_for :fulfillment
 
   # Validations
-  # Worry about uniqueness to tenant after porting line info.
+  # Worry about uniqueness to tenant after porting city info.
   # validates_uniqueness_to_tenant :primary_phone
   validates :name,
             :primary_phone,
             :intake_date,
-            :line,
+            :city,
             presence: true
   validates :primary_phone, format: /\A\d{10}\z/,
                             length: { is: 10 }
@@ -58,7 +58,7 @@ class Patient < ApplicationRecord
   validates :household_size_adults, :household_size_children,
             numericality: { only_integer: true, allow_nil: true, greater_than_or_equal_to: -1 }
   validates :name, :primary_phone, :emergency_contact, :emergency_contact_phone, :emergency_contact_relationship,
-            :voicemail_preference, :language, :pronouns, :city, :state, :county, :zipcode,
+            :voicemail_preference, :language, :pronouns, :city, :state, :zipcode, 
             :race_ethnicity, :employment_status, :insurance, :income, :referred_by, :procedure_type,
             length: { maximum: 150 }
   validates_associated :fulfillment
@@ -74,8 +74,8 @@ class Patient < ApplicationRecord
 
   # Methods
   def save_identifier
-    # [Line first initial][Phone 6th digit]-[Phone last four]
-    self.identifier = "#{line.name[0].upcase}#{primary_phone[-5]}-#{primary_phone[-4..-1]}"
+    # [City first initial][Phone 6th digit]-[Phone last four]
+    self.identifier = "#{city.name[0].upcase}#{primary_phone[-5]}-#{primary_phone[-4..-1]}"
   end
 
   def initials
@@ -88,7 +88,7 @@ class Patient < ApplicationRecord
       cm_name: updated_by&.name || 'System',
       patient_name: name,
       patient_id: id,
-      line: line,
+      city: city,
       pledge_amount: fund_pledge
     }
   end
@@ -102,16 +102,16 @@ class Patient < ApplicationRecord
     CallListEntry.where(patient_id: id).destroy_all
   end
 
-  def update_call_list_lines
+  def update_call_list_cities
     CallListEntry.where(patient: self)
-                 .update(line: line, order_key: 999)
+                 .update(city: city, order_key: 999)
   end
 
   def confirm_unique_phone_number
     ##
     # This method is preferred over Rail's built-in uniqueness validator
     # so that case managers get a meaningful error message when a patient
-    # exists on a different line than the one the volunteer is serving.
+    # exists on a different city than the one the volunteer is serving.
     #
     # See https://github.com/DCAFEngineering/dcaf_case_management/issues/825
     ##
@@ -121,13 +121,13 @@ class Patient < ApplicationRecord
     # skip when an existing patient updates and matches itself
     return if phone_match.id == id
 
-    patients_line = phone_match.line
-    volunteers_line = line
-    if volunteers_line == patients_line
-      errors.add(:this_phone_number_is_already_taken, 'on this line.')
+    patients_city = phone_match.city
+    volunteers_city = city
+    if volunteers_city == patients_city
+      errors.add(:this_phone_number_is_already_taken, 'on this city.')
     else
       errors.add(:this_phone_number_is_already_taken,
-                 "on the #{patients_line.name} line. If you need the patient's line changed, please contact the CM directors.")
+                 "on the #{patients_city.name} city. If you need the patient's city changed, please contact the CM directors.")
     end
   end
 
@@ -234,9 +234,9 @@ class Patient < ApplicationRecord
                   updated_at: { '$lte' => datetime })
   end
 
-  def self.unconfirmed_practical_support(line)
+  def self.unconfirmed_practical_support(city)
     Patient.distinct
-           .where(line: line)
+           .where(city: city)
            .joins(:practical_supports)
            .where({ practical_supports: { confirmed: false }, created_at: 3.months.ago.. })
   end

@@ -5,9 +5,9 @@ class CallListEntry < ApplicationRecord
   # Relationships
   belongs_to :user
   belongs_to :patient
-  belongs_to :line
+  belongs_to :city
 
   # Validations
-  validates :order_key, :line, presence: true
+  validates :order_key, :city, presence: true
   validates_uniqueness_to_tenant :patient, scope: :user
 end

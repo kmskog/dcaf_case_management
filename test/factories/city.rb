@@ -1,7 +1,7 @@
 FactoryBot.define do
-  factory :line do
+  factory :city do
     sequence :name do |n|
-      "Line#{n}"
+      "City#{n}"
     end
     fund
   end

@@ -38,7 +38,7 @@ task multitenant_db_merge: :environment do
   # Store the mappings between an old id and new id, and update them as we port the goods
   @config_mappings = {}
   @clinic_mappings = {}
-  @line_mappings = {}
+  @city_mappings = {}
   @user_mappings = {}
   @call_mappings = {}
   @external_pledge_mappings = {}
@@ -110,8 +110,8 @@ task multitenant_db_merge: :environment do
   }
   @clinic_mappings = easy_mass_insert Clinic, 'clinics', clinic_map
 
-  # Port lines
-  line_map = -> (x) {
+  # Port cities
+  city_map = -> (x) {
     x.except('id', 'fund_id', 'created_at', 'updated_at')
      .merge({
        'fund_id' => @fund_id,
@@ -119,11 +119,11 @@ task multitenant_db_merge: :environment do
        'updated_at' => x['updated_at'].asctime.in_time_zone("America/New_York")
      })
   }
-  @line_mappings = easy_mass_insert Line, 'lines', line_map
+  @city_mappings = easy_mass_insert City, 'cities', city_map
 
   # Port users
   user_map = -> (x) {
-    x.except('id', 'fund_id', 'line', 'created_at', 'updated_at')
+    x.except('id', 'fund_id', 'city', 'created_at', 'updated_at')
      .merge({
        'fund_id' => @fund_id,
        'created_at' => x['created_at'].asctime.in_time_zone("America/New_York"),
@@ -134,12 +134,12 @@ task multitenant_db_merge: :environment do
 
   # Port patients
   patient_map = -> (x) {
-    x.except('id', 'fund_id', 'created_at', 'updated_at', 'line_id', 'clinic_id', 'pledge_generated_by_id', 'pledge_sent_by_id', 'last_edited_by_id')
+    x.except('id', 'fund_id', 'created_at', 'updated_at', 'city_id', 'clinic_id', 'pledge_generated_by_id', 'pledge_sent_by_id', 'last_edited_by_id')
      .merge({
        'fund_id' => @fund_id,
        'created_at' => x['created_at'].asctime.in_time_zone("America/New_York"),
        'updated_at' => x['updated_at'].asctime.in_time_zone("America/New_York"),
-       'line_id' => @line_mappings[x['line_id']],
+       'city_id' => @city_mappings[x['city_id']],
        'clinic_id' => @clinic_mappings[x['clinic_id']],
        'pledge_generated_by_id' => @user_mappings[x['pledge_generated_by_id']],
        'pledge_sent_by_id' => @user_mappings[x['pledge_sent_by_id']],
@@ -150,12 +150,12 @@ task multitenant_db_merge: :environment do
 
   # Port archived patients
   archived_patient_map = -> (x) {
-    x.except('id', 'fund_id', 'created_at', 'updated_at', 'line_id', 'clinic_id', 'pledge_generated_by_id', 'pledge_sent_by_id')
+    x.except('id', 'fund_id', 'created_at', 'updated_at', 'city_id', 'clinic_id', 'pledge_generated_by_id', 'pledge_sent_by_id')
      .merge({
        'fund_id' => @fund_id,
        'created_at' => x['created_at'].asctime.in_time_zone("America/New_York"),
        'updated_at' => x['updated_at'].asctime.in_time_zone("America/New_York"),
-       'line_id' => @line_mappings[x['line_id']],
+       'city_id' => @city_mappings[x['city_id']],
        'clinic_id' => @clinic_mappings[x['clinic_id']],
        'pledge_generated_by_id' => @user_mappings[x['pledge_generated_by_id']],
        'pledge_sent_by_id' => @user_mappings[x['pledge_sent_by_id']],
@@ -256,12 +256,12 @@ task multitenant_db_merge: :environment do
 
   # Port call list entries
   cle_map = -> (x) {
-    res = x.except('id', 'created_at', 'updated_at', 'fund_id', 'line_id', 'patient_id', 'user_id')
+    res = x.except('id', 'created_at', 'updated_at', 'fund_id', 'city_id', 'patient_id', 'user_id')
            .merge({
              'fund_id' => @fund_id,
              'created_at' => x['created_at'].asctime.in_time_zone("America/New_York"),
              'updated_at' => x['updated_at'].asctime.in_time_zone("America/New_York"),
-             'line_id' => @line_mappings[x['line_id']],
+             'city_id' => @city_mappings[x['city_id']],
              'patient_id' => @patient_mappings[x['patient_id']],
              'user_id' => @user_mappings[x['user_id']]
            })
@@ -271,12 +271,12 @@ task multitenant_db_merge: :environment do
 
   # Port events
   event_map = -> (x) {
-    res = x.except('id', 'created_at', 'updated_at', 'fund_id', 'line_id', 'patient_id')
+    res = x.except('id', 'created_at', 'updated_at', 'fund_id', 'city_id', 'patient_id')
            .merge({
              'fund_id' => @fund_id,
              'created_at' => x['created_at'].asctime.in_time_zone("America/New_York"),
              'updated_at' => x['updated_at'].asctime.in_time_zone("America/New_York"),
-             'line_id' => @line_mappings[x['line_id']],
+             'city_id' => @city_mappings[x['city_id']],
              'patient_id' => @patient_mappings[x['patient_id'].to_i],
            })
     res['patient_id'].nil? ? nil : res
@@ -295,7 +295,7 @@ task multitenant_db_merge: :environment do
     'pledge_sent_by_id' => @user_mappings,
     'last_edited_by_id' => @user_mappings,
     'user_id' => @user_mappings,
-    'line_id' => @line_mappings,
+    'city_id' => @city_mappings,
     'patient_id' => @patient_mappings,
     'can_call_id' => @patient_mappings,
     'can_pledge_id' => @patient_mappings,
@@ -311,7 +311,7 @@ task multitenant_db_merge: :environment do
     'ExternalPledge' => @external_pledge_mappings,
     'Event' => @event_mappings,
     'Fulfillment' => @fulfillment_mappings,
-    'Line' => @line_mappings,
+    'City' => @city_mappings,
     'Note' => @note_mappings,
     'Patient' => @patient_mappings,
     'User' => @user_mappings,

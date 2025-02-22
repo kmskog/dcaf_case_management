@@ -3,7 +3,7 @@ class Event < ApplicationRecord
   acts_as_tenant :fund
 
   # Relations
-  belongs_to :line
+  belongs_to :city
 
   encrypts :cm_name
   encrypts :patient_name
@@ -19,7 +19,7 @@ class Event < ApplicationRecord
   # TODO: what other actions do we want to add?
 
   # Validations
-  validates :event_type, :cm_name, :patient_name, :patient_id, :line, presence: true
+  validates :event_type, :cm_name, :patient_name, :patient_id, :city, presence: true
   validates :pledge_amount,
             presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
             if: :pledged?

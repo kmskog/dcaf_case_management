@@ -7,13 +7,13 @@ module PatientSearchable
   class_methods do
     # Case insensitive and phone number format agnostic!
     # pass `search_limit: nil` for no limit.
-    def search(name_or_phone_str, lines: nil, search_limit: DEFAULT_SEARCH_LIMIT)
+    def search(name_or_phone_str, cities: nil, search_limit: DEFAULT_SEARCH_LIMIT)
       wildcard_name = "%#{name_or_phone_str}%"
       clean_phone = name_or_phone_str.gsub(/\D/, '')
 
       base = Patient
-      if lines
-        base = base.where(line: lines)
+      if cities
+        base = base.where(city: cities)
       end
       matches = base.where('name ilike ?', wildcard_name)
                     .or(base.where('emergency_contact ilike ?', wildcard_name))

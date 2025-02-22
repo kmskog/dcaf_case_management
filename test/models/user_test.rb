@@ -57,11 +57,11 @@ class UserTest < ActiveSupport::TestCase
 
   describe 'call list methods' do
     before do
-      @line = create :line
-      @line2 = create :line
-      @patient = create :patient, line: @line
-      @patient_2 = create :patient, line: @line
-      @md_patient = create :patient, line: @line2
+      @city = create :city
+      @city2 = create :city
+      @patient = create :patient, city: @city
+      @patient_2 = create :patient, city: @city
+      @md_patient = create :patient, city: @city2
       @user.add_patient @patient
       @user.add_patient @patient_2
       @user.add_patient @md_patient
@@ -69,7 +69,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     it 'should return recently_called_patients accurately' do
-      assert_equal 0, @user.recently_called_patients(@line).count
+      assert_equal 0, @user.recently_called_patients(@city).count
 
       with_versioning(@user) do
         @patient.calls.create attributes_for(:call)
@@ -77,48 +77,48 @@ class UserTest < ActiveSupport::TestCase
         @md_patient.calls.create attributes_for(:call)
       end
 
-      assert_equal 2, @user.recently_called_patients(@line).count
-      assert_equal 1, @user.recently_called_patients(@line2).count
+      assert_equal 2, @user.recently_called_patients(@city).count
+      assert_equal 1, @user.recently_called_patients(@city2).count
     end
 
     it 'should return call_list_patients accurately' do
-      assert_equal 2, @user.call_list_patients(@line).count
-      assert_equal 1, @user.call_list_patients(@line2).count
+      assert_equal 2, @user.call_list_patients(@city).count
+      assert_equal 1, @user.call_list_patients(@city2).count
 
       with_versioning(@user) do
         @patient.calls.create attributes_for(:call)
       end
-      assert_equal 1, @user.call_list_patients(@line).count
+      assert_equal 1, @user.call_list_patients(@city).count
 
       with_versioning(create(:user)) do
         @patient_2.calls.create attributes_for(:call)
       end
-      assert_equal 1, @user.call_list_patients(@line).count
+      assert_equal 1, @user.call_list_patients(@city).count
     end
 
     it 'should clean calls when patient has been reached' do
-      assert_equal 0, @user.recently_called_patients(@line).count
+      assert_equal 0, @user.recently_called_patients(@city).count
 
       with_versioning(@user) do
         @patient.calls.create attributes_for(:call, status: :reached_patient)
       end
       @call = @patient.calls.first
-      assert_equal 1, @user.recently_called_patients(@line).count
-      assert_difference '@user.recently_called_patients(@line).count', -1 do
+      assert_equal 1, @user.recently_called_patients(@city).count
+      assert_difference '@user.recently_called_patients(@city).count', -1 do
         @user.clean_call_list_between_shifts
       end
     end
 
     it 'should not clear calls when patient has not been reached' do
-      assert_equal 0, @user.recently_called_patients(@line).count
+      assert_equal 0, @user.recently_called_patients(@city).count
 
       with_versioning(@user) do
         @patient.calls.create attributes_for(:call, status: :left_voicemail)
       end
       @call = @patient.calls.first
-      assert_equal 1, @user.recently_called_patients(@line).count
+      assert_equal 1, @user.recently_called_patients(@city).count
       @user.clean_call_list_between_shifts
-      assert_equal 1, @user.recently_called_patients(@line).count
+      assert_equal 1, @user.recently_called_patients(@city).count
     end
 
     it 'should clear patient list when user has not logged in' do
@@ -140,9 +140,9 @@ class UserTest < ActiveSupport::TestCase
 
     it 'should clear call list when someone invokes the cleanout' do
       assert_difference '@user.call_list_entries.count', -2 do
-        assert_no_difference '@user.call_list_entries.where(line: @line2).count' do
+        assert_no_difference '@user.call_list_entries.where(city: @city2).count' do
           assert_no_difference 'Patient.count' do
-            @user.clear_call_list @line
+            @user.clear_call_list @city
           end
         end
       end
@@ -151,11 +151,11 @@ class UserTest < ActiveSupport::TestCase
 
   describe 'patient methods' do
     before do
-      @line = create :line
-      @line2 = create :line
-      @patient = create :patient, line: @line2
-      @patient_2 = create :patient, line: @line
-      @patient_3 = create :patient, line: @line
+      @city = create :city
+      @city2 = create :city
+      @patient = create :patient, city: @city2
+      @patient_2 = create :patient, city: @city
+      @patient_3 = create :patient, city: @city
     end
 
     it 'add patient - should add a patient to a set' do
@@ -175,20 +175,20 @@ class UserTest < ActiveSupport::TestCase
       before do
         [@patient, @patient_2, @patient_3].each { |patient| @user.add_patient patient }
         new_order = [@patient_3, @patient_2].map { |x| x.id.to_s }
-        @user.reorder_call_list new_order, @line
+        @user.reorder_call_list new_order, @city
       end
 
       it 'should let you reorder a call list' do
-        assert_equal @patient_3, @user.call_list_patients(@line).first
-        assert_equal @patient_2, @user.call_list_patients(@line)[1]
+        assert_equal @patient_3, @user.call_list_patients(@city).first
+        assert_equal @patient_2, @user.call_list_patients(@city)[1]
       end
 
       it 'should always add new patients to the front of the call order' do
-        @patient_4 = create :patient, line: @line
+        @patient_4 = create :patient, city: @city
         @user.add_patient @patient_4
 
-        assert @user.call_list_patients(@line).include? @patient_4
-        assert_equal @user.call_list_patients(@line).map { |x| x.id.to_s }.index(@patient_4.id.to_s), 0
+        assert @user.call_list_patients(@city).include? @patient_4
+        assert_equal @user.call_list_patients(@city).map { |x| x.id.to_s }.index(@patient_4.id.to_s), 0
       end
     end
   end
@@ -207,8 +207,8 @@ class UserTest < ActiveSupport::TestCase
         [@user, @user_2].each { |user| user.add_patient preg }
       end
 
-      assert_equal @user.call_list_entries.pluck(:patient_id, :line_id, :order_key),
-                   @user_2.call_list_entries.pluck(:patient_id, :line_id, :order_key)
+      assert_equal @user.call_list_entries.pluck(:patient_id, :city_id, :order_key),
+                   @user_2.call_list_entries.pluck(:patient_id, :city_id, :order_key)
     end
   end
 

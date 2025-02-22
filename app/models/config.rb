@@ -32,7 +32,6 @@ class Config < ApplicationRecord
   # Whether a config should show a current options dropdown to the right
   # Must have a `_options` method implemented
   SHOW_CURRENT_OPTIONS = [
-    :county,
     :insurance,
     :language,
     :practical_support,
@@ -43,6 +42,8 @@ class Config < ApplicationRecord
 
   enum :config_key, {
     insurance: 0,
+    external_pledge_source: 1, #removing this and changing values broke the script. Needs investigation
+    pledge_limit_help_text: 2, #removing this and changing values broke the script. Needs investigation
     language: 3,
     resources_url: 4,
     practical_support_guidance_url: 5,
@@ -74,7 +75,6 @@ class Config < ApplicationRecord
     start_of_week: [:fix_capitalization],
     hide_practical_support: [:fix_capitalization],
     language: [:fix_capitalization],
-    county: [:fix_capitalization],
     time_zone: [:titleize_capitalization]
   }.freeze
 
@@ -86,8 +86,6 @@ class Config < ApplicationRecord
     referred_by:
       [:validate_length],
     voicemail:
-      [:validate_length],
-    county:
       [:validate_length],
     procedure_type:
       [:validate_length],

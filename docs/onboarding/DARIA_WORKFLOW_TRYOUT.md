@@ -9,7 +9,7 @@ DARIA is designed around a warm-line process, where case managers are checking v
 * Go to [sandbox.dariaservices.com](https://sandbox.dariaservices.com).
 * Use the username `test@example.com` and the password `AbortionsAreAHumanRight1`.
 * Click the `Sign in with Password` button.
-* Select the `Main` line and click `Get Started`.
+* Select the `Main` city and click `Get Started`.
 
 ## Using your call list
 
@@ -20,7 +20,7 @@ This takes you to the main case manager view. You will see:
 * Patients on your call list, tied to your user account
 * Patients you've called from your call list, in a section called `Completed Calls`
 * Shared patients (these are visible to all case managers)
-* Call line activity log
+* City activity log
 
 ### Finding and creating new patients
 

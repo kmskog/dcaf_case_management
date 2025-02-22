@@ -4,20 +4,20 @@ class PatientsControllerTest < ActionDispatch::IntegrationTest
   before do
     @user = create :user
     @admin = create :user, role: :admin
-    @line = create :line
+    @city = create :city
     @data_volunteer = create :user, role: :data_volunteer
 
     sign_in @user
-    choose_line @line
+    choose_city @city
     @clinic = create :clinic
     @patient = create :patient,
                       name: 'Susie Everyteen',
                       primary_phone: '123-456-7890',
                       emergency_contact_phone: '333-444-5555',
-                      line: @line,
+                      city: @city,
                       city: '=injected_formula'
     @archived_patient = create :archived_patient,
-                               line: @line,
+                               city: @city,
                                intake_date: 400.days.ago
   end
 
@@ -63,13 +63,13 @@ class PatientsControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'text/csv', response.content_type.split(';').first
     end
 
-    it 'should consist of a header line, the patient record, and the archived patient record' do
+    it 'should consist of a header city, the patient record, and the archived patient record' do
       sign_in @data_volunteer
       get patients_path(format: :csv)
-      lines = response.body.split("\n").reject(&:blank?)
-      assert_equal 3, lines.count
-      assert_match @patient.id.to_s, lines[1]
-      assert_match @archived_patient.id.to_s, lines[2]
+      cities = response.body.split("\n").reject(&:blank?)
+      assert_equal 3, cities.count
+      assert_match @patient.id.to_s, cities[1]
+      assert_match @archived_patient.id.to_s, cities[2]
     end
 
     it 'should not contain personally-identifying information' do
@@ -83,15 +83,15 @@ class PatientsControllerTest < ActionDispatch::IntegrationTest
     it 'should escape fields with attempted formula injection' do
       sign_in @data_volunteer
       get patients_path(format: :csv)
-      lines = response.body.split("\n").reject(&:blank?)
+      cities = response.body.split("\n").reject(&:blank?)
       # A single quote at the beginning indicates it's escaped.
-      assert_match "'=injected_formula", lines[1]
+      assert_match "'=injected_formula", cities[1]
     end
   end
 
   describe 'create method' do
     before do
-      @new_patient = attributes_for :patient, name: 'Test Patient', line_id: @line.id
+      @new_patient = attributes_for :patient, name: 'Test Patient', city_id: @city.id
     end
 
     it 'should create and save a new patient' do
@@ -367,7 +367,7 @@ class PatientsControllerTest < ActionDispatch::IntegrationTest
   # confirm sending a 'post' with a payload results in a new patient
   describe 'data_entry_create method' do
     before do
-      @test_patient = attributes_for :patient, name: 'Test Patient', line_id: create(:line).id
+      @test_patient = attributes_for :patient, name: 'Test Patient', city_id: create(:city).id
     end
 
     it 'should create and save a new patient' do

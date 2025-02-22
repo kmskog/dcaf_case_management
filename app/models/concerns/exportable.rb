@@ -11,11 +11,10 @@ module Exportable
     "Archived?" => :archived?,
     "Has Alt Contact?" => :has_alt_contact,
     "Voicemail Preference" => :voicemail_preference,
-    "Line" => :get_line,
+    "City" => :get_city,
     "Language" => :preferred_language,
     "Age" => :age_range,
     "State" => :state,
-    "County" => :county,
     "City" => :city,
     "Race or Ethnicity" => :race_ethnicity,
     "Employment Status" => :employment_status,
@@ -78,8 +77,8 @@ module Exportable
     # TODO test to confirm that specific blacklisted fields aren't being exported
   }.freeze
 
-  def get_line
-    line.try :name
+  def get_city
+    city.try :name
   end
 
   def fulfilled
@@ -204,13 +203,13 @@ module Exportable
     shaped_supports.join('; ')
   end
 
-  PATIENT_RELATIONS = [:line, :clinic, :fulfillment, :external_pledges, :calls, :practical_supports]
-  ARCHIVED_PATIENT_RELATIONS = [:line, :clinic, :fulfillment, :external_pledges, :calls, :practical_supports]
+  PATIENT_RELATIONS = [:city, :clinic, :fulfillment, :external_pledges, :calls, :practical_supports]
+  ARCHIVED_PATIENT_RELATIONS = [:city, :clinic, :fulfillment, :external_pledges, :calls, :practical_supports]
 
   class_methods do
     def csv_header
       Enumerator.new do |y|
-        y << CSV.generate_line(CSV_EXPORT_FIELDS.keys, encoding: 'utf-8')
+        y << CSV.generate_city(CSV_EXPORT_FIELDS.keys, encoding: 'utf-8')
       end
     end
 
@@ -226,7 +225,7 @@ module Exportable
       Enumerator.new do |y|
         includes(relations).each do |export|
           row = CSV_EXPORT_FIELDS.values.map{ |field| export.get_field_value_for_serialization(field) }
-          y << CSV.generate_line(row, encoding: 'utf-8')
+          y << CSV.generate_city(row, encoding: 'utf-8')
         end
       end
     end

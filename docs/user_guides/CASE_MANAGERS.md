@@ -6,7 +6,7 @@ Case managers will spend most of their time on the `Call List page` and the `Pat
 
 ## The call list page
 
-When you log in and pick your line, and see a header of `Build your call list`, you are on the `Call List page`. This is where you can plan your work for the evening, make a list of people to call, log any new callers, and keep tabs on who you've called.
+When you log in and pick your city, and see a header of `Build your call list`, you are on the `Call List page`. This is where you can plan your work for the evening, make a list of people to call, log any new callers, and keep tabs on who you've called.
 
 ### Build your call list
 
@@ -39,7 +39,7 @@ You can click the patient's name to go straight to their `Patient Record page`.
 
 ### Shared cases
 
-There is a way to flag patients so that they are easier for others to find. This section is where they show up. This is shared across everyone who logs in on the line.
+There is a way to flag patients so that they are easier for others to find. This section is where they show up. This is shared across everyone who logs in on the city.
 
 To mark a patient as shared, look in the `Patient Record page` under `Notes`.
 
@@ -47,9 +47,9 @@ Patients automatically filter out of this section after a period of not being up
 
 The period of inactivity before a patient will be removed from the shared cases list is configurable per fund. See the `Flagged` tooltip for your fund's setting.
 
-### Line Activity Log
+### City Activity Log
 
-To make it easier to see who the previous case manager was communicating with, we have the `Line Activity Log`. DARIA keeps track of every call and pledge in the last three weeks, and displays them in this section for a given line.
+To make it easier to see who the previous case manager was communicating with, we have the `City Activity Log`. DARIA keeps track of every call and pledge in the last three weeks, and displays them in this section for a given city.
 
 You can use this section to add particular patients to your call list, or click into their patient records.
 

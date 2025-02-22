@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class UpdateUserInfoTest < ApplicationSystemTestCase
   before do
-    create :line
+    create :city
     @user = create :user
     log_in_as @user
   end

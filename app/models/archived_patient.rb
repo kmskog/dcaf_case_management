@@ -7,7 +7,7 @@ class ArchivedPatient < ApplicationRecord
   include Exportable
 
   # Relationships
-  belongs_to :line
+  belongs_to :city
   belongs_to :clinic, optional: true
   has_one :fulfillment, as: :can_fulfill
   has_many :calls, as: :can_call
@@ -26,7 +26,7 @@ class ArchivedPatient < ApplicationRecord
 
   # Validations
   validates :intake_date,
-            :line,
+            :city,
             presence: true
   validates :procedure_date, format: /\A\d{4}-\d{1,2}-\d{1,2}\z/,
                                allow_blank: true
@@ -48,10 +48,8 @@ class ArchivedPatient < ApplicationRecord
 
   def self.convert_patient(patient)
     archived_patient = new(
-      line: patient.line,
       city: patient.city,
       state: patient.state,
-      county: patient.county,
       intake_date: patient.intake_date,
       procedure_date: patient.procedure_date,
       multiday_appointment: patient.multiday_appointment,
@@ -79,7 +77,7 @@ class ArchivedPatient < ApplicationRecord
     )
 
     archived_patient.clinic_id = patient.clinic_id if patient.clinic_id
-    archived_patient.line_id = patient.line_id
+    archived_patient.city_id = patient.city_id
 
     PaperTrail.request(whodunnit: patient.created_by_id) do
       archived_patient.save!

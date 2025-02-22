@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_18_024934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -26,7 +26,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.boolean "shared_flag"
     t.string "city"
     t.string "state"
-    t.string "county"
     t.string "race_ethnicity"
     t.string "employment_status"
     t.string "insurance"
@@ -41,15 +40,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "fund_id"
-    t.bigint "line_id", null: false
     t.boolean "solidarity"
     t.string "solidarity_lead"
     t.string "procedure_type"
     t.boolean "multiday_appointment"
     t.boolean "practical_support_waiver", comment: "Optional practical support services waiver, for funds that use them"
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_archived_patients_on_city_id"
     t.index ["clinic_id"], name: "index_archived_patients_on_clinic_id"
     t.index ["fund_id"], name: "index_archived_patients_on_fund_id"
-    t.index ["line_id"], name: "index_archived_patients_on_line_id"
     t.index ["line_legacy"], name: "index_archived_patients_on_line_legacy"
   end
 
@@ -76,9 +75,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "fund_id"
-    t.bigint "line_id", null: false
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_call_list_entries_on_city_id"
     t.index ["fund_id"], name: "index_call_list_entries_on_fund_id"
-    t.index ["line_id"], name: "index_call_list_entries_on_line_id"
     t.index ["line_legacy"], name: "index_call_list_entries_on_line_legacy"
     t.index ["patient_id", "user_id", "fund_id"], name: "index_call_list_entries_on_patient_id_and_user_id_and_fund_id", unique: true
     t.index ["patient_id"], name: "index_call_list_entries_on_patient_id"
@@ -94,6 +93,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.bigint "fund_id"
     t.index ["can_call_type", "can_call_id"], name: "index_calls_on_can_call_type_and_can_call_id"
     t.index ["fund_id"], name: "index_calls_on_fund_id"
+  end
+
+  create_table "cities", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "fund_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "state"
+    t.index ["fund_id"], name: "index_cities_on_fund_id"
+    t.index ["name", "fund_id"], name: "index_cities_on_name_and_fund_id", unique: true
   end
 
   create_table "clinics", force: :cascade do |t|
@@ -163,10 +172,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "fund_id"
-    t.bigint "line_id", null: false
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_events_on_city_id"
     t.index ["created_at"], name: "index_events_on_created_at"
     t.index ["fund_id"], name: "index_events_on_fund_id"
-    t.index ["line_id"], name: "index_events_on_line_id"
     t.index ["line_legacy"], name: "index_events_on_line_legacy"
   end
 
@@ -211,15 +220,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.string "phone", comment: "Contact number for the abortion fund, usually the hotline"
   end
 
-  create_table "lines", force: :cascade do |t|
-    t.string "name", null: false
-    t.bigint "fund_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["fund_id"], name: "index_lines_on_fund_id"
-    t.index ["name", "fund_id"], name: "index_lines_on_name_and_fund_id", unique: true
-  end
-
   create_table "notes", force: :cascade do |t|
     t.string "full_text", null: false
     t.bigint "patient_id"
@@ -245,7 +245,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
   create_table "patients", force: :cascade do |t|
     t.string "name", null: false
     t.string "primary_phone", null: false
-    t.string "emergency_conctact"
+    t.string "emergency_contact"
     t.string "emergency_contact_phone"
     t.string "emergency_contact_relationship"
     t.string "identifier"
@@ -260,7 +260,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.integer "age"
     t.string "city"
     t.string "state"
-    t.string "county"
     t.string "zipcode"
     t.string "race_ethnicity"
     t.string "employment_status"
@@ -279,7 +278,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "fund_id"
-    t.bigint "line_id", null: false
     t.boolean "solidarity"
     t.string "solidarity_lead"
     t.string "procedure_type"
@@ -290,13 +288,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.string "email"
     t.string "emergency_reference_wording"
     t.string "in_case_of_emergency", default: [], array: true
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_patients_on_city_id"
     t.index ["clinic_id"], name: "index_patients_on_clinic_id"
-    t.index ["emergency_conctact"], name: "index_patients_on_emergency_conctact"
+    t.index ["emergency_contact"], name: "index_patients_on_emergency_contact"
     t.index ["emergency_contact_phone"], name: "index_patients_on_emergency_contact_phone"
     t.index ["fund_id"], name: "index_patients_on_fund_id"
     t.index ["identifier"], name: "index_patients_on_identifier"
     t.index ["last_edited_by_id"], name: "index_patients_on_last_edited_by_id"
-    t.index ["line_id"], name: "index_patients_on_line_id"
     t.index ["line_legacy"], name: "index_patients_on_line_legacy"
     t.index ["name"], name: "index_patients_on_name"
     t.index ["primary_phone", "fund_id"], name: "index_patients_on_primary_phone_and_fund_id", unique: true
@@ -351,7 +350,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
 
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
-    t.string "line"
     t.integer "role", default: 0, null: false
     t.boolean "disabled_by_fund", default: false
     t.datetime "created_at", null: false
@@ -371,6 +369,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.bigint "fund_id"
     t.string "unique_session_id"
     t.string "session_validity_token"
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_users_on_city_id"
     t.index ["email", "fund_id"], name: "index_users_on_email_and_fund_id", unique: true
     t.index ["fund_id"], name: "index_users_on_fund_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -390,28 +390,29 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_15_223439) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "archived_patients", "cities"
   add_foreign_key "archived_patients", "clinics"
   add_foreign_key "archived_patients", "funds"
-  add_foreign_key "archived_patients", "lines"
   add_foreign_key "auth_factors", "users"
+  add_foreign_key "call_list_entries", "cities"
   add_foreign_key "call_list_entries", "funds"
-  add_foreign_key "call_list_entries", "lines"
   add_foreign_key "call_list_entries", "patients"
   add_foreign_key "call_list_entries", "users"
   add_foreign_key "calls", "funds"
+  add_foreign_key "cities", "funds"
   add_foreign_key "clinics", "funds"
   add_foreign_key "configs", "funds"
+  add_foreign_key "events", "cities"
   add_foreign_key "events", "funds"
-  add_foreign_key "events", "lines"
   add_foreign_key "external_pledges", "funds"
   add_foreign_key "fulfillments", "funds"
-  add_foreign_key "lines", "funds"
   add_foreign_key "notes", "funds"
+  add_foreign_key "patients", "cities"
   add_foreign_key "patients", "clinics"
   add_foreign_key "patients", "funds"
-  add_foreign_key "patients", "lines"
   add_foreign_key "patients", "users", column: "last_edited_by_id"
   add_foreign_key "practical_supports", "funds"
+  add_foreign_key "users", "cities"
   add_foreign_key "users", "funds"
   add_foreign_key "versions", "funds"
 end

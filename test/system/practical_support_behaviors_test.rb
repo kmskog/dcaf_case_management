@@ -2,9 +2,9 @@ require "application_system_test_case"
 
 class PracticalSupportBehaviorsTest < ApplicationSystemTestCase
   before do
-    @line = create :line
+    @city = create :city
     @user = create :user
-    @patient = create :patient, line: @line
+    @patient = create :patient, city: @city
     create_display_practical_support_attachment_url_config
     create_display_practical_support_waiver_config
   end

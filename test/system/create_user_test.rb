@@ -4,7 +4,7 @@ require 'application_system_test_case'
 class CreateUserTest < ApplicationSystemTestCase
   extend Minitest::OptionalRetry
   
-  before { create :line }
+  before { create :city }
 
   describe 'nonadmin user' do
     before { visit root_path }

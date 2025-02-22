@@ -4,12 +4,12 @@ class UpdatePatientInfoTest < ApplicationSystemTestCase
   extend Minitest::OptionalRetry
 
   before do
-    @line = create :line
-    @line2 = create :line
+    @city = create :city
+    @city2 = create :city
     @user = create :user
     @admin = create :user, role: :admin
     @clinic = create :clinic
-    @patient = create :patient, line: @line
+    @patient = create :patient, city: @city
     @patient.external_pledges.create source: 'Metallica Abortion Fund',
                                      amount: 100
     @ext_pledge = @patient.external_pledges.first
@@ -211,7 +211,6 @@ class UpdatePatientInfoTest < ApplicationSystemTestCase
       wait_for_ajax
 
       select 'DC', from: 'patient_state'
-      fill_in 'County', with: 'Wash'
       fill_in 'Zipcode', with: '200091002'
       select 'Voicemail OK', from: 'patient_voicemail_preference'
       check 'Textable?'
@@ -246,7 +245,6 @@ class UpdatePatientInfoTest < ApplicationSystemTestCase
         assert_equal 'White/Caucasian', find('#patient_race_ethnicity').value
         assert has_field? 'City', with: 'Washington'
         assert_equal 'DC', find('#patient_state').value
-        assert has_field? 'County', with: 'Wash'
         assert has_field? 'Zipcode', with: '20009-1002'
         assert_equal 'yes', find('#patient_voicemail_preference').value
         assert has_checked_field?('Textable?')
@@ -263,7 +261,7 @@ class UpdatePatientInfoTest < ApplicationSystemTestCase
         assert_equal 'Spanish', find('#patient_language').value
         assert has_checked_field? 'Homelessness'
         assert has_checked_field? 'Prison'
-        assert has_no_css? '#patient_line'
+        assert has_no_css? '#patient_city'
       end
     end
 
@@ -275,14 +273,14 @@ class UpdatePatientInfoTest < ApplicationSystemTestCase
         visit edit_patient_path @patient
         wait_for_element 'Patient Information'
 
-        select @line2.name, from: 'patient_line_id'
+        select @city2.name, from: 'patient_city_id'
         click_away_from_field
         reload_page_and_click_link 'Patient Information'
       end
 
       it 'should alter the information' do
         within :css, '#patient_information' do
-          assert_equal @line2.id.to_s, find('#patient_line_id').value
+          assert_equal @city2.id.to_s, find('#patient_city_id').value
         end
       end
     end

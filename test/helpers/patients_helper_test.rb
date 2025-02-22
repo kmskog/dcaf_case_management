@@ -274,40 +274,16 @@ class PatientsHelperTest < ActionView::TestCase
     end
   end
 
-  describe 'line_options' do
+  describe 'city_options' do
     before do
-      @line1 = create :line, name: 'JJ'
-      @line2 = create :line, name: 'Sage'
-      @line3 = create :line, name: 'Lomky Jr'
+      @city1 = create :city, name: 'JJ'
+      @city2 = create :city, name: 'Sage'
+      @city3 = create :city, name: 'Lomky Jr'
     end
 
-    it 'should return line names and ids' do
-      expected = [['JJ', @line1.id], ['Lomky Jr', @line3.id], ['Sage', @line2.id]]
-      assert_equal expected, line_options
-    end
-  end
-
-  describe 'county_options' do
-    describe 'with a config' do
-      before { create_county_config }
-
-      it 'should include custom counties as well as current' do
-        expected_counties = [nil, 'Arlington', 'Fairfax', 'Montgomery',
-                              "Prince George's"]
-        assert_same_elements expected_counties,
-                            county_options("Prince George's")
-      end
-    end
-
-    describe 'without a config' do
-      it 'should create a config and return empty' do
-        assert_difference 'Config.count', 1 do
-          @options = county_options
-        end
-
-        assert_empty @options
-        assert Config.find_by(config_key: 'county')
-      end
+    it 'should return city names and ids' do
+      expected = [['JJ', @city1.id], ['Lomky Jr', @city3.id], ['Sage', @city2.id]]
+      assert_equal expected, city_options
     end
   end
 

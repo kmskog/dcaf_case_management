@@ -1,37 +1,37 @@
 require 'test_helper'
 
-# Test lines setting behavior
-class LinesControllerTest < ActionDispatch::IntegrationTest
+# Test cities setting behavior
+class CitiesControllerTest < ActionDispatch::IntegrationTest
   before do
     @user = create :user
-    @line = create :line
+    @city = create :city
     sign_in @user
   end
 
   describe 'new' do
-    describe 'instance with multiple lines' do
-      # Stub a second line
-      before { create :line }
+    describe 'instance with multiple cities' do
+      # Stub a second city
+      before { create :city }
 
       it 'should return success' do
-        get new_line_path
+        get new_city_path
         assert_response :success
       end
     end
 
-    describe 'instance with one line' do
+    describe 'instance with one city' do
       it 'should redirect to patient dashboard' do
-        get new_line_path
+        get new_city_path
         assert_redirected_to authenticated_root_path
-        assert_equal @line.id, session[:line_id]
+        assert_equal @city.id, session[:city_id]
       end
     end
 
-    describe 'instance with no lines' do
+    describe 'instance with no cities' do
       it 'should raise an error' do
-        @line.destroy
-        assert_raises Exceptions::NoLinesForFundError do
-          get new_line_path
+        @city.destroy
+        assert_raises Exceptions::NoCitiesForFundError do
+          get new_city_path
         end
       end
     end
@@ -39,15 +39,15 @@ class LinesControllerTest < ActionDispatch::IntegrationTest
 
   describe 'create' do
     before do
-      post lines_path, params: { line_id: @line.id }
+      post cities_path, params: { city_id: @city.id }
     end
 
     it 'should set a session variable' do
-      assert_equal @line.id, session[:line_id]
+      assert_equal @city.id, session[:city_id]
     end
 
-    # TODO: Enforce line values
-    # it 'should reject anything not set in lines' do
+    # TODO: Enforce city values
+    # it 'should reject anything not set in cities' do
     # end
   end
 end

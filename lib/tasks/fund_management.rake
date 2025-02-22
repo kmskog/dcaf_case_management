@@ -41,7 +41,7 @@ namespace :fund_management do
   private
   def print_counts
     models_fund_agnostic = [ Fund, ActiveRecord::SessionStore::Session, PaperTrail::Version, PaperTrailVersion]
-    models_fund_dependent = [ ArchivedPatient, Patient, Fulfillment, PledgeConfig, ExternalPledge, PracticalSupport, Note, Call, Event, CallListEntry, Clinic, Line, Config, User ]
+    models_fund_dependent = [ ArchivedPatient, Patient, Fulfillment, PledgeConfig, ExternalPledge, PracticalSupport, Note, Call, Event, CallListEntry, Clinic, City, Config, User ]
     starting_counts = {}
     Fund.all.sort.each do |fund|
       fund_counts = {}

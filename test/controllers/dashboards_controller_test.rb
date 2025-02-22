@@ -3,14 +3,14 @@ require 'test_helper'
 class DashboardsControllerTest < ActionDispatch::IntegrationTest
   before do
     @user = create :user
-    @line = create :line
+    @city = create :city
     @patient = create :patient,
                       name: 'Susie Everyteen',
                       primary_phone: '123-456-7890',
                       emergency_contact_phone: '333-444-5555',
-                      line: @line
+                      city: @city
     sign_in @user
-    choose_line @line
+    choose_city @city
   end
 
   describe 'index method' do
@@ -40,7 +40,7 @@ class DashboardsControllerTest < ActionDispatch::IntegrationTest
 
     describe 'budget bar calculations' do
       it 'handles the empty case' do
-        assert_equal DashboardsController.new.budget_bar_calculations(@line),
+        assert_equal DashboardsController.new.budget_bar_calculations(@city),
                      { limit: 1_000, expenditures: { sent: [], pledged: [] } }
       end
 
@@ -50,8 +50,8 @@ class DashboardsControllerTest < ActionDispatch::IntegrationTest
                         clinic_id: Clinic.first.id,
                         fund_pledge: 50
 
-        assert_equal DashboardsController.new.budget_bar_calculations(@line),
-                     { limit: 1_000, expenditures: Patient.pledged_status_summary(@line) }
+        assert_equal DashboardsController.new.budget_bar_calculations(@city),
+                     { limit: 1_000, expenditures: Patient.pledged_status_summary(@city) }
       end
     end
   end

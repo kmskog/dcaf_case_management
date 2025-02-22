@@ -1,6 +1,6 @@
 # Controller for managing a user's call list.
 class CallListsController < ApplicationController
-  include LinesHelper
+  include CitiesHelper
 
   before_action :retrieve_patients, only: [:add_patient, :remove_patient]
   rescue_from ActiveRecord::RecordNotFound, with: -> { head :not_found }
@@ -20,14 +20,14 @@ class CallListsController < ApplicationController
   end
 
   def clear_current_user_call_list
-    current_user.clear_call_list current_line
+    current_user.clear_call_list current_city
     respond_to do |format|
       format.js { render template: 'users/refresh_patients', layout: false }
     end
   end
 
   def reorder_call_list
-    current_user.reorder_call_list params[:order], current_line
+    current_user.reorder_call_list params[:order], current_city
     head :ok
   end
 

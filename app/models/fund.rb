@@ -2,7 +2,7 @@ class Fund < ApplicationRecord
   # TODO make papertrailable
 
   # Relations
-  has_many :lines
+  has_many :cities
   has_one :pledge_config
 
   # Validations
@@ -28,7 +28,7 @@ class Fund < ApplicationRecord
   end
 
   def delete_administrative_data
-    [ Clinic, Config, Line, User ].each do |model|
+    [ Clinic, Config, City, User ].each do |model|
       model.destroy_all
     end
   end

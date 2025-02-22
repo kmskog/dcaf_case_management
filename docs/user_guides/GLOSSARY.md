@@ -2,9 +2,9 @@
 
 These are quick explanations of concepts or specialized terms in DARIA.
 
-## Lines
+## Cities
 
-Some funds divide their operations into multiple funnels, which we call lines. DCAF, for example, sorts callers into _lines_ of DC, MD, VA, and Spanish, so that case managers don't get overwhelmed and work is divided up more equally. (Email the DARIA team if you want your DARIA instance to get a new line.)
+Some funds divide their operations into multiple locations, which we call cities. For example, sorting patients into _cities_ of New York and San Francisco, so that case managers don't get overwhelmed and work is divided up more equally. (Email the DARIA team if you want your DARIA instance to get a new city.)
 
 ## Shared cases
 

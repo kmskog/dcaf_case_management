@@ -17,7 +17,7 @@ To provision an app, we'll need the following information. The DARIA team member
 * Phone number of the abortion fund (e.g. 202-000-1111) - referred to as `FUND_PHONE`
 * Website of the fund (e.g. dcabortionfund.org) - referred to as `FUND_DOMAIN`
 * Name and email of the fund admins (e.g. Susan Everyteen - susan@example.com) - we create initial admin accounts for these people
-* Whether one line is okay, or whether they'd like additional lines.
+* Whether one city is okay, or whether they'd like additional cities.
 * Whether they'd like DARIA to generate pledge PDFs, or whether they want to keep doing it as is. (This is not for initial setup, and if so, follow up separately.)
 * Who should be added to the updates listserv/google group.
 * Who their primary point of contact is and their signal #.
@@ -47,9 +47,9 @@ We also need to have some API tokens and such that we generate or dig up when we
 * Set that fund as Active for scoping purposes:
   * `ActsAsTenant.current_tenant = Fund.find_by(name: NAME)`
 
-* Set up the Lines:
-  * If you didn't get explicit instructions on which lines, that means they just need one, `Main`. Run `Line.create name: 'Main'`.
-  * If you DID get a set of lines to create, for every line they want, run `Line.create name: LINE_NAME`. ex: `Line.create name: 'Cats'`.
+* Set up the Cities:
+  * If you didn't get explicit instructions on which cities, that means they just need one, `Main`. Run `City.create name: 'Main'`.
+  * If you DID get a set of cities to create, for every city they want, run `City.create name: CITY_NAME`. ex: `City.create name: 'Cats'`.
 
 * Set up the first users, and also do a little smoke testing while you're at it:
   * Set yourself up first, using this snippet:
@@ -78,7 +78,7 @@ User.create email: 'daria-user@opentechstrategies.com',
 
 * Smoke test to confirm things are working properly.
   * Head to the domain you set up and try logging in with google, to affirm that OAuth is properly set up. If that doesn't work, check that OAuth is configured properly in the Google Cloud console.
-  * Confirm that the lines are properly set and show up right. For most funds, this means after logging in you will go straight to the call list. For funds with more than one line, you'll go to a line selection screen instead. If this is does not behave as expected, hop into the console and check that `Line.all` has objects associated with the new values.
+  * Confirm that the cities are properly set and show up right. For most funds, this means after logging in you will go straight to the call list. For funds with more than one city, you'll go to a city selection screen instead. If this is does not behave as expected, hop into the console and check that `City.all` has objects associated with the new values.
   * Confirm that the top left badge name (`DARIA - full fund name`) is showing properly. If this is weird, check that the fund's `full_name` attribute is set right in the rails console.
 
   * Log in at the domain you set up, using Google. (This will confirm that logging in with google works.)

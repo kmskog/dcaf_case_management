@@ -139,12 +139,12 @@ class PatientsController < ApplicationController
   ].freeze
 
   PATIENT_INFORMATION_PARAMS = [
-    :line_id,
+    :city_id,
     :legal_name, :email,
     :age, :race_ethnicity, :language, :voicemail_preference, :textable,
-    :city, :state, :county, :zipcode, :emergency_contact, :other_phone,
+    :city, :state, :zipcode, :emergency_contact, :emergency_contact_phone, #:county,
     :emergency_contact_relationship,
-    :other_contact_referencing,
+    :emergency_contact_referencing,
     :employment_status, :income,
     :household_size_adults, :household_size_children, :insurance, :referred_by,
     :procedure_type,
@@ -172,12 +172,12 @@ class PatientsController < ApplicationController
                              :check_number, :date_of_check, :audited]
   ].freeze
 
-  OTHER_PARAMS = [:shared_flag, :initial_call_date, :practical_support_waiver].freeze
+  OTHER_PARAMS = [:shared_flag, :intake_date, :practical_support_waiver].freeze
 
   def patient_params
     permitted_params = [].concat(
       PATIENT_DASHBOARD_PARAMS, PATIENT_INFORMATION_PARAMS,
-      PROCEDURE_INFORMATION_PARAMS, SHIFT_INFORMATION_PARAMS, OTHER_PARAMS
+      PROCEDURE_INFORMATION_PARAMS, OTHER_PARAMS #SHIFT_INFORMATION_PARAMS, 
     )
     permitted_params.concat(FULFILLMENT_PARAMS) if current_user.allowed_data_access?
     params.require(:patient).permit(permitted_params)

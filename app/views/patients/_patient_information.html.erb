@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col info-form-left">
         <% if current_user.admin? %>
-          <%= f.select :line_id, options_for_select(line_options, patient.line.id) %>
+          <%= f.select :city_id, options_for_select(city_options, patient.city.id) %>
         <% end %>
 
         <%= f.text_field :legal_name,

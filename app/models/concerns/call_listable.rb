@@ -6,21 +6,21 @@ module CallListable
   # someone has a call from the current_user
   # that is less than 8 hours old,
   # AND they would otherwise be in the call list
-  # (e.g. assigned to current line and in user.patients)
-  def call_list_patients(line)
-    ordered_patients(line).reject { |x| recently_called_by_user? x }
+  # (e.g. assigned to current city and in user.patients)
+  def call_list_patients(city)
+    ordered_patients(city).reject { |x| recently_called_by_user? x }
   end
 
-  def recently_called_patients(line)
-    ordered_patients(line).select { |x| recently_called_by_user? x }
+  def recently_called_patients(city)
+    ordered_patients(city).select { |x| recently_called_by_user? x }
   end
 
-  def recently_reached_patients(line)
-    ordered_patients(line).select { |x| recently_reached_by_user? x }
+  def recently_reached_patients(city)
+    ordered_patients(city).select { |x| recently_reached_by_user? x }
   end
 
   def add_patient(patient)
-    present_calls = call_list_entries.where(line: patient.line).to_a
+    present_calls = call_list_entries.where(city: patient.city).to_a
     return if present_calls.map { |x| x.patient_id.to_s }.include? patient.id.to_s
 
     # Increment existing call list entries and then insert the new one.
@@ -28,7 +28,7 @@ module CallListable
       entry.update order_key: entry.order_key + 1
     end
     call_list_entries.create! patient: patient,
-                              line: patient.line,
+                              city: patient.city,
                               order_key: 0
     reload
   end
@@ -38,8 +38,8 @@ module CallListable
     reload
   end
 
-  def reorder_call_list(order, line)
-    current_entries = call_list_entries.includes(:patient, :fund, :line, :user).where(line: line).to_a
+  def reorder_call_list(order, city)
+    current_entries = call_list_entries.includes(:patient, :fund, :city, :user).where(city: city).to_a
     order.each_with_index do |pt, i|
       current = current_entries.find { |x| x.patient_id.to_s == pt }
       current.update order_key: i
@@ -53,24 +53,24 @@ module CallListable
     # current_sign_in_at is a devise field set to the user's last login
     if current_sign_in_at.present? &&
        current_sign_in_at < Time.zone.now - TIME_BEFORE_INACTIVE
-       clear_call_list(Line.all)
+       clear_call_list(City.all)
     else
-      ids_for_destroy = recently_reached_patients(Line.all).map { |x| x.id.to_s }
+      ids_for_destroy = recently_reached_patients(City.all).map { |x| x.id.to_s }
       call_list_entries.where(patient_id: ids_for_destroy).destroy_all
     end
     reload
   end
 
-  def clear_call_list(line)
-    call_list_entries.where(line: line).destroy_all
+  def clear_call_list(city)
+    call_list_entries.where(city: city).destroy_all
   end
 
   private
 
-  def ordered_patients(line)
+  def ordered_patients(city)
     # n+1 join here
     call_list_entries.includes(patient: [:calls, :fulfillment])
-                     .where(line: line)
+                     .where(city: city)
                      .order(order_key: :asc)
                      .map(&:patient)
                      .reject(&:nil?)

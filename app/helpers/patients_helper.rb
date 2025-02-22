@@ -139,14 +139,6 @@ module PatientsHelper
      [t('common.prefer_not_to_answer'), 'Prefer not to answer']]
   end
 
-  def county_options(current_value = nil)
-    county_options = Config.find_or_create_by(config_key: 'county').options
-
-    return [] if county_options.blank?
-
-    options_plus_current([nil] + county_options, current_value)
-  end
-
   def household_size_options
     (0..10).map { |i| i }
            .unshift([t('common.prefer_not_to_answer'), -1])
@@ -212,13 +204,9 @@ module PatientsHelper
     active_surgeons | inactive_surgeons
   end
 
-  def disable_continue?(patient)
-    patient.pledge_info_present? ? 'disabled="disabled"' : ''
-  end
-
-  def pledge_limit_help_text_options
-    Config.find_or_create_by(config_key: 'pledge_limit_help_text').options
-  end
+  # def disable_continue?(patient)
+  #   patient.pledge_info_present? ? 'disabled="disabled"' : ''
+  # end
 
   def state_options(current_state)
     StateGeoTools.state_codes.map { |code| [code, code] }.unshift([nil, nil])
@@ -241,8 +229,8 @@ module PatientsHelper
     options.uniq
   end
 
-  def line_options
-    Line.all.sort_by(&:name).map { |x| [x.name, x.id] }
+  def city_options
+    City.all.sort_by(&:name).map { |x| [x.name, x.id] }
   end
 
   def procedure_date_display(patient)
